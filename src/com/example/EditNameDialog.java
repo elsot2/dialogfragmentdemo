@@ -6,18 +6,20 @@ import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
-public class EditNameDialog extends DialogFragment {
+public class EditNameDialog extends DialogFragment implements OnEditorActionListener {
 
     public interface EditNameDialogListener {
         void onFinishEditDialog(String inputText);
     }
 
-    private EditText editText;
+    private EditText mEditText;
 
     public EditNameDialog() {
         // Empty constructor required for DialogFragment
@@ -27,29 +29,26 @@ public class EditNameDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_name, container);
-        editText = (EditText) view.findViewById(R.id.txt_yourName);
+        mEditText = (EditText) view.findViewById(R.id.txt_your_name);
 
         // Show soft keyboard automatically
-        editText.requestFocus();
+        mEditText.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        // Return input text to activity
-        editText.setOnKeyListener(new OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN)
-                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Perform action on key press
-                    EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-                    activity.onFinishEditDialog(editText.getText().toString());
-                    // EditNameDialog.this.dismiss();
-                    return true;
-                }
-                return false;
-            }
-        });
+        mEditText.setOnEditorActionListener(this);
 
         return view;
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (EditorInfo.IME_ACTION_DONE == actionId) {
+            // Return input text to activity
+            EditNameDialogListener activity = (EditNameDialogListener) getActivity();
+            activity.onFinishEditDialog(mEditText.getText().toString());
+            EditNameDialog.this.dismiss();
+            return true;
+        }
+        return false;
     }
 }

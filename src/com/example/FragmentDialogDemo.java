@@ -22,14 +22,14 @@ public class FragmentDialogDemo extends FragmentActivity implements EditNameDial
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(new EditNameDialog(), "dlg_edit_name");
-        ft.addToBackStack(null);
+//        ft.addToBackStack(null);
         ft.commit();
     }
 
     @Override
     public void onFinishEditDialog(String inputText) {
         FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStack();
+//        fm.popBackStack();
         Toast.makeText(this, "Hi, " + inputText, Toast.LENGTH_SHORT).show();
     }
 
