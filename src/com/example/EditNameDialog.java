@@ -47,7 +47,7 @@ public class EditNameDialog extends DialogFragment implements OnEditorActionList
             // Return input text to activity
             EditNameDialogListener activity = (EditNameDialogListener) getActivity();
             activity.onFinishEditDialog(mEditText.getText().toString());
-            EditNameDialog.this.dismiss();
+            this.dismiss();
             return true;
         }
         return false;
